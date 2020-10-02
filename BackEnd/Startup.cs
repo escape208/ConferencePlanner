@@ -8,6 +8,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using System.Threading.Tasks;
 using System.Runtime.InteropServices;
+using System.Text.Json.Serialization;
 
 namespace BackEnd
 {
@@ -30,7 +31,11 @@ namespace BackEnd
                 options.UseSqlite("Data Source=conferences.db");
             });
 
-            services.AddControllers();
+            services.AddControllers()
+                    .AddJsonOptions(options =>
+                    {
+                        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+                    }); ;
 
             services.AddSwaggerGen(options =>
                 options.SwaggerDoc("v1", new OpenApiInfo { Title = "Conference Planner API", Version = "v1" })
